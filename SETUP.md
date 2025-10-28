@@ -18,11 +18,17 @@ cp env.example.txt .env
 Sửa file `.env`:
 ```env
 # Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=p2a_user
-DB_PASSWORD=p2a_password
-DB_DATABASE=p2a_career
+DB_MASTER_HOST=localhost
+DB_MASTER_PORT=5534
+DB_MASTER_USERNAME=p2a_career_user
+DB_MASTER_PASSWORD=P2aCareer!2025
+DB_MASTER_DATABASE=p2a_career
+
+DB_SLAVE_HOST=localhost
+DB_SLAVE_PORT=5535
+DB_SLAVE_USERNAME=p2a_career_user
+DB_SLAVE_PASSWORD=P2aCareer!2025
+DB_SLAVE_DATABASE=p2a_career
 
 # JWT (PHẢI GIỐNG VỚI CORE SYSTEM)
 JWT_SECRET=your-super-secret-jwt-key-same-as-core
