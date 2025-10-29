@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import compression from 'compression';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/filters';
+import { TransformInterceptor } from './common/interceptors';
 
 /**
  * Bootstrap function - Khởi tạo NestJS application
@@ -50,6 +52,10 @@ async function bootstrap() {
       },
     }),
   );
+
+  // Global filters & interceptors (chuẩn hóa response và lỗi)
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new TransformInterceptor());
 
 
   // Start HTTP server

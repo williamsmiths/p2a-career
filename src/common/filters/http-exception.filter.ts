@@ -21,37 +21,61 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-
-    let message = 'Đã xảy ra lỗi không xác định';
-    let errors: any[] = [];
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let errors: any = null;
+    let code: string | undefined;
 
     if (exception instanceof HttpException) {
+      status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      
-      if (typeof exceptionResponse === 'string') {
-        message = exceptionResponse;
-      } else if (typeof exceptionResponse === 'object') {
+
+      if (typeof exceptionResponse === 'object') {
         const resp = exceptionResponse as any;
-        message = resp.message || message;
-        errors = resp.errors || [];
+        // Prefer provided code and errors if available
+        code = resp.code || code;
+        errors = resp.errors || resp.error || null;
+
+        // Handle class-validator style messages array
+        if (Array.isArray(resp.message)) {
+          errors = resp.message;
+        }
       }
     } else if (exception instanceof Error) {
-      message = exception.message;
+      // Log unexpected server errors
       this.logger.error(`Unhandled error: ${exception.message}`, exception.stack);
+      code = code || 'INTERNAL_SERVER_ERROR';
+    }
+
+    // Derive code from status if not explicitly provided
+    if (!code) {
+      const statusName = (HttpStatus as any)[status] as string | undefined;
+      if (Array.isArray(errors)) {
+        code = 'VALIDATION_ERROR';
+      } else if (statusName) {
+        code = statusName;
+      } else {
+        code = 'ERROR';
+      }
     }
 
     const errorResponse = {
       success: false,
       statusCode: status,
-      message,
-      ...(errors.length > 0 && { errors }),
+      code,
+      ...(errors && { errors }),
       timestamp: new Date().toISOString(),
       path: request.url,
     };
+
+    // Structured logging by severity
+    if (status >= 500) {
+      this.logger.error(
+        `${request.method} ${request.url} - ${status}`,
+        JSON.stringify(errorResponse),
+      );
+    } else {
+      this.logger.warn(`${request.method} ${request.url} - ${status}`);
+    }
 
     response.status(status).json(errorResponse);
   }

@@ -1,5 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, validateSync, IsOptional } from 'class-validator';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { ErrorCode } from '../common/errors';
 
 enum Environment {
   Development = 'development',
@@ -74,7 +76,17 @@ export default function validate(config: Record<string, unknown>) {
   const errors = validateSync(validatedConfig, { skipMissingProperties: true });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString());
+    const formatted = errors.map((e) => ({
+      property: e.property,
+      constraints: e.constraints,
+    }));
+    throw new HttpException(
+      {
+        code: ErrorCode.ENV_VALIDATION_ERROR,
+        errors: formatted,
+      },
+      HttpStatus.BAD_REQUEST,
+    );
   }
   return validatedConfig;
 }
