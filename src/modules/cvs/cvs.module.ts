@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CvsController } from './cvs.controller';
 import { CvsService } from './cvs.service';
-import { Cv, CvExperience, CvProject, CvCertification } from '../../database/entities';
+import { Cv, CvExperience, CvProject, CvCertification } from '@entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Cv, CvExperience, CvProject, CvCertification])],

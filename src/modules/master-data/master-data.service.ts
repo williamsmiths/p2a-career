@@ -1,17 +1,18 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserRole } from '../../common/enums';
+import { UserRole } from '@common';
 
 // Entities
-import { Country } from '../../database/entities/country.entity';
-import { City } from '../../database/entities/city.entity';
-import { District } from '../../database/entities/district.entity';
-import { Industry } from '../../database/entities/industry.entity';
-import { Skill } from '../../database/entities/skill.entity';
-import { PositionLevel } from '../../database/entities/position-level.entity';
-import { ExperienceLevel } from '../../database/entities/experience-level.entity';
-import { CompanySize } from '../../database/entities/company-size.entity';
+import { Country } from '@entities';
+import { City } from '@entities';
+import { District } from '@entities';
+import { Industry } from '@entities';
+import { Skill } from '@entities';
+import { PositionLevel } from '@entities';
+import { ExperienceLevel } from '@entities';
+import { CompanySize } from '@entities';
+import { BusinessException, ErrorCode } from '@common';
 
 // DTOs
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -65,7 +66,7 @@ export class MasterDataService {
   async findCountryById(id: number): Promise<Country> {
     const country = await this.countriesRepository.findOne({ where: { id } });
     if (!country) {
-      throw new NotFoundException(`Quốc gia với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return country;
   }
@@ -111,7 +112,7 @@ export class MasterDataService {
       relations: ['country']
     });
     if (!city) {
-      throw new NotFoundException(`Thành phố với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return city;
   }
@@ -157,7 +158,7 @@ export class MasterDataService {
       relations: ['city']
     });
     if (!district) {
-      throw new NotFoundException(`Quận/Huyện với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return district;
   }
@@ -194,7 +195,7 @@ export class MasterDataService {
   async findIndustryById(id: number): Promise<Industry> {
     const industry = await this.industriesRepository.findOne({ where: { id } });
     if (!industry) {
-      throw new NotFoundException(`Ngành nghề với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return industry;
   }
@@ -236,7 +237,7 @@ export class MasterDataService {
   async findSkillById(id: number): Promise<Skill> {
     const skill = await this.skillsRepository.findOne({ where: { id } });
     if (!skill) {
-      throw new NotFoundException(`Kỹ năng với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return skill;
   }
@@ -273,7 +274,7 @@ export class MasterDataService {
   async findPositionLevelById(id: number): Promise<PositionLevel> {
     const positionLevel = await this.positionLevelsRepository.findOne({ where: { id } });
     if (!positionLevel) {
-      throw new NotFoundException(`Cấp bậc vị trí với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return positionLevel;
   }
@@ -310,7 +311,7 @@ export class MasterDataService {
   async findExperienceLevelById(id: number): Promise<ExperienceLevel> {
     const experienceLevel = await this.experienceLevelsRepository.findOne({ where: { id } });
     if (!experienceLevel) {
-      throw new NotFoundException(`Cấp độ kinh nghiệm với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return experienceLevel;
   }
@@ -347,7 +348,7 @@ export class MasterDataService {
   async findCompanySizeById(id: number): Promise<CompanySize> {
     const companySize = await this.companySizesRepository.findOne({ where: { id } });
     if (!companySize) {
-      throw new NotFoundException(`Quy mô công ty với ID ${id} không tồn tại`);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
     return companySize;
   }

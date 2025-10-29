@@ -5,7 +5,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 
 // Config
-import { appConfig, databaseConfig, jwtConfig, grpcConfig, validate } from './config';
+import { appConfig, databaseConfig, jwtConfig, grpcConfig, validate } from '@config';
 
 // Common
 import { JwtAuthGuard, RolesGuard } from './common/guards';

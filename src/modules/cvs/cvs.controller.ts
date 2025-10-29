@@ -2,8 +2,7 @@ import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CvsService } from './cvs.service';
 import { CreateCvDto, UpdateCvDto } from './dto';
-import { CurrentUser, Roles } from '../../common/decorators';
-import { UserRole } from '../../common/enums';
+import { CurrentUser, Roles, UserRole } from '@common';
 
 /**
  * CVs Controller

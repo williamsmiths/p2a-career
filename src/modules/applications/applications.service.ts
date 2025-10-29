@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JobApplication } from '../../database/entities';
+import { JobApplication } from '@entities';
 import { CreateApplicationDto, UpdateApplicationStatusDto } from './dto';
-import { NotFoundException, ConflictException, ForbiddenException } from '../../common/exceptions';
-import { UserRole } from '../../common/enums';
+import { BusinessException, ErrorCode } from '@common';
+
 
 /**
  * Applications Service
@@ -31,7 +31,7 @@ export class ApplicationsService {
     });
 
     if (existing) {
-      throw new ConflictException('Bạn đã ứng tuyển công việc này rồi');
+      throw new BusinessException(ErrorCode.CONFLICT);
     }
 
     const application = this.applicationsRepository.create({
@@ -84,7 +84,7 @@ export class ApplicationsService {
       .getOne();
 
     if (application && application.job.company.userId !== userId) {
-      throw new ForbiddenException('Bạn không có quyền xem hồ sơ ứng tuyển của công việc này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     const [applications, total] = await this.applicationsRepository.findAndCount({
@@ -118,7 +118,7 @@ export class ApplicationsService {
     });
 
     if (!application) {
-      throw new NotFoundException('Hồ sơ ứng tuyển', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     return { application };
@@ -138,12 +138,12 @@ export class ApplicationsService {
     });
 
     if (!application) {
-      throw new NotFoundException('Hồ sơ ứng tuyển', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     // Kiểm tra quyền
     if (application.job.company.userId !== userId) {
-      throw new ForbiddenException('Bạn không có quyền cập nhật hồ sơ này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     Object.assign(application, updateApplicationStatusDto);
@@ -162,11 +162,11 @@ export class ApplicationsService {
     });
 
     if (!application) {
-      throw new NotFoundException('Hồ sơ ứng tuyển', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     if (application.userId !== userId) {
-      throw new ForbiddenException('Bạn không có quyền rút hồ sơ này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     await this.applicationsRepository.remove(application);

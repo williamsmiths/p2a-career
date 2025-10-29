@@ -12,8 +12,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
-import { CurrentUser, Public, Roles } from '../../common/decorators';
-import { UserRole } from '../../common/enums';
+import { CurrentUser, Public, Roles, UserRole } from '@common';
 
 /**
  * Companies Controller

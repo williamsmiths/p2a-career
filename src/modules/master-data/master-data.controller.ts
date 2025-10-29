@@ -11,9 +11,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { MasterDataService } from './master-data.service';
-import { UserRole } from '../../common/enums';
-import { Roles } from '../../common/decorators';
-import { RolesGuard } from '../../common/guards';
+import { UserRole, Roles, RolesGuard } from '@common';
 
 // DTOs
 import { CreateCountryDto } from './dto/create-country.dto';

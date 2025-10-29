@@ -1,7 +1,7 @@
 import { IsOptional, IsEnum, IsInt, IsBoolean, IsString, Min } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { JobType, JobStatus } from '../../../common/enums';
+import { JobType, JobStatus } from '@common';
 
 export class FilterJobsDto {
   @ApiPropertyOptional({ description: 'Từ khóa tìm kiếm (title, description)' })

@@ -1,4 +1,4 @@
-import { Injectable, ExecutionContext, UnauthorizedException, CanActivate, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, ExecutionContext, CanActivate, HttpException, HttpStatus } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators';
 import { GrpcClientService } from '../../modules/grpc-client/grpc-client.service';
@@ -26,12 +26,28 @@ export class JwtAuthGuard implements CanActivate {
     const authHeader: string | undefined = request.headers['authorization'] || request.headers['Authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Thiếu header Authorization dạng Bearer');
+      throw new HttpException(
+        {
+          success: false,
+          statusCode: HttpStatus.UNAUTHORIZED,
+          code: ErrorCode.UNAUTHORIZED,
+          timestamp: new Date().toISOString(),
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const token = authHeader.substring('Bearer '.length).trim();
     if (!token) {
-      throw new UnauthorizedException('Token không hợp lệ');
+      throw new HttpException(
+        {
+          success: false,
+          statusCode: HttpStatus.UNAUTHORIZED,
+          code: ErrorCode.UNAUTHORIZED,
+          timestamp: new Date().toISOString(),
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     try {
@@ -51,16 +67,12 @@ export class JwtAuthGuard implements CanActivate {
       const code = rawMessage === ErrorCode.AUTH_TOKEN_EXPIRED
         ? ErrorCode.AUTH_TOKEN_EXPIRED
         : ErrorCode.AUTH_TOKEN_INVALID;
-      const message = code === ErrorCode.AUTH_TOKEN_EXPIRED
-        ? 'Token đã hết hạn'
-        : 'Token không hợp lệ';
       // Trả về HttpException với code cụ thể để HttpExceptionFilter giữ nguyên thay vì gán "UNAUTHORIZED"
       throw new HttpException(
         {
           success: false,
           statusCode: HttpStatus.UNAUTHORIZED,
           code,
-          errors: message,
           timestamp: new Date().toISOString(),
         },
         HttpStatus.UNAUTHORIZED,

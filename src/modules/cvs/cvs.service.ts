@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cv, CvExperience, CvProject, CvCertification } from '../../database/entities';
+import { Cv, CvExperience, CvProject, CvCertification } from '@entities';
 import { CreateCvDto, UpdateCvDto } from './dto';
-import { NotFoundException, ForbiddenException } from '../../common/exceptions';
-import { UserRole } from '../../common/enums';
+import { BusinessException, ErrorCode } from '@common';
+import { UserRole } from '@common';
 
 /**
  * CVs Service
@@ -103,7 +103,7 @@ export class CvsService {
     });
 
     if (!cv) {
-      throw new NotFoundException('CV', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     return { cv };
@@ -118,12 +118,12 @@ export class CvsService {
     });
 
     if (!cv) {
-      throw new NotFoundException('CV', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     // Chỉ owner hoặc admin mới được sửa
     if (cv.userId !== userId && userRole !== UserRole.ADMIN) {
-      throw new ForbiddenException('Bạn không có quyền sửa CV này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     const { experiences, projects, certifications, ...cvData } = updateCvDto;
@@ -187,11 +187,11 @@ export class CvsService {
     });
 
     if (!cv) {
-      throw new NotFoundException('CV', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     if (cv.userId !== userId && userRole !== UserRole.ADMIN) {
-      throw new ForbiddenException('Bạn không có quyền xóa CV này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     await this.cvsRepository.remove(cv);

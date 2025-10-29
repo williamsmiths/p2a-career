@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
-import { Job } from '../../database/entities';
+import { Job } from '@entities';
 import { CreateJobDto, UpdateJobDto, FilterJobsDto } from './dto';
-import { NotFoundException, ForbiddenException } from '../../common/exceptions';
-import { UserRole, JobStatus } from '../../common/enums';
+import { BusinessException, ErrorCode } from '@common';
+import { UserRole, JobStatus } from '@common';
 import { CompaniesService } from '../companies/companies.service';
 
 /**
@@ -118,7 +118,7 @@ export class JobsService {
     });
 
     if (!job) {
-      throw new NotFoundException('Tin tuyển dụng', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     // Tăng view count
@@ -138,12 +138,12 @@ export class JobsService {
     });
 
     if (!job) {
-      throw new NotFoundException('Tin tuyển dụng', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     // Chỉ owner company hoặc admin mới được sửa
     if (job.company.userId !== userId && userRole !== UserRole.ADMIN) {
-      throw new ForbiddenException('Bạn không có quyền sửa tin tuyển dụng này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     Object.assign(job, updateJobDto);
@@ -163,11 +163,11 @@ export class JobsService {
     });
 
     if (!job) {
-      throw new NotFoundException('Tin tuyển dụng', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     if (job.company.userId !== userId && userRole !== UserRole.ADMIN) {
-      throw new ForbiddenException('Bạn không có quyền xóa tin tuyển dụng này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     await this.jobsRepository.remove(job);

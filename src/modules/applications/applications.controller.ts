@@ -12,8 +12,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto, UpdateApplicationStatusDto } from './dto';
-import { CurrentUser, Roles } from '../../common/decorators';
-import { UserRole } from '../../common/enums';
+import { CurrentUser, Roles, UserRole } from '@common';
 
 /**
  * Applications Controller

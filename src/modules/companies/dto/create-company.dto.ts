@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsEnum, IsInt, IsArray, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CompanyType } from '../../../common/enums';
+import { CompanyType } from '@common';
 
 export class CreateCompanyDto {
   @ApiProperty({ description: 'Tên công ty' })

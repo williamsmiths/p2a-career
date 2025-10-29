@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsEnum, IsInt, IsBoolean, IsDateString, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { JobType } from '../../../common/enums';
+import { JobType } from '@common';
 
 export class CreateJobDto {
   @ApiProperty({ description: 'Tiêu đề công việc' })

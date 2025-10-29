@@ -12,8 +12,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JobsService } from './jobs.service';
 import { CreateJobDto, UpdateJobDto, FilterJobsDto } from './dto';
-import { CurrentUser, Public, Roles } from '../../common/decorators';
-import { UserRole } from '../../common/enums';
+import { CurrentUser, Public, Roles, UserRole } from '@common';
 
 /**
  * Jobs Controller

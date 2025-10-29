@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Delete, Param, Query, ParseIntPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { SavedJobsService } from './saved-jobs.service';
-import { CurrentUser, Roles } from '../../common/decorators';
-import { UserRole } from '../../common/enums';
+import { CurrentUser, Roles, UserRole } from '@common';
 
 /**
  * Saved Jobs Controller

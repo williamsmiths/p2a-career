@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SavedJob } from '../../database/entities';
-import { NotFoundException, ConflictException } from '../../common/exceptions';
+import { SavedJob } from '@entities';
+import { BusinessException, ErrorCode } from '@common';
 
 /**
  * Saved Jobs Service
@@ -27,7 +27,7 @@ export class SavedJobsService {
     });
 
     if (existing) {
-      throw new ConflictException('Bạn đã lưu công việc này rồi');
+      throw new BusinessException(ErrorCode.CONFLICT);
     }
 
     const savedJob = this.savedJobsRepository.create({
@@ -75,7 +75,7 @@ export class SavedJobsService {
     });
 
     if (!savedJob) {
-      throw new NotFoundException('Công việc đã lưu');
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     await this.savedJobsRepository.remove(savedJob);

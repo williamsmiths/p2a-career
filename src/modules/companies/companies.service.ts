@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Company } from '../../database/entities';
+import { Company } from '@entities';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
-import { NotFoundException, ConflictException, ForbiddenException } from '../../common/exceptions';
-import { UserRole } from '../../common/enums';
+import { BusinessException, ErrorCode } from '@common';
+import { UserRole } from '@common';
 
 /**
  * Companies Service
@@ -29,7 +29,7 @@ export class CompaniesService {
     });
 
     if (existing) {
-      throw new ConflictException('Bạn đã có hồ sơ công ty rồi');
+      throw new BusinessException(ErrorCode.CONFLICT);
     }
 
     const company = this.companiesRepository.create({
@@ -52,7 +52,7 @@ export class CompaniesService {
     });
 
     if (!company) {
-      throw new NotFoundException('Công ty', userId);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     return { company };
@@ -67,12 +67,12 @@ export class CompaniesService {
     });
 
     if (!company) {
-      throw new NotFoundException('Công ty', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     // Chỉ owner hoặc admin mới được sửa
     if (company.userId !== userId && userRole !== UserRole.ADMIN) {
-      throw new ForbiddenException('Bạn không có quyền sửa công ty này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     Object.assign(company, updateCompanyDto);
@@ -92,7 +92,7 @@ export class CompaniesService {
     });
 
     if (!company) {
-      throw new NotFoundException('Công ty', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     return { company };
@@ -130,11 +130,11 @@ export class CompaniesService {
     });
 
     if (!company) {
-      throw new NotFoundException('Công ty', id);
+      throw new BusinessException(ErrorCode.NOT_FOUND);
     }
 
     if (company.userId !== userId && userRole !== UserRole.ADMIN) {
-      throw new ForbiddenException('Bạn không có quyền xóa công ty này');
+      throw new BusinessException(ErrorCode.FORBIDDEN);
     }
 
     await this.companiesRepository.remove(company);

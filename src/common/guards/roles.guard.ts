@@ -1,8 +1,8 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators';
 import { UserRole } from '../enums';
-import { ForbiddenException } from '../exceptions';
+import { ErrorCode } from '../errors/error-codes';
 
 /**
  * Roles Guard
@@ -25,14 +25,28 @@ export class RolesGuard implements CanActivate {
     const { user } = context.switchToHttp().getRequest();
 
     if (!user) {
-      throw new ForbiddenException('Không tìm thấy thông tin người dùng');
+      throw new HttpException(
+        {
+          success: false,
+          statusCode: HttpStatus.FORBIDDEN,
+          code: ErrorCode.FORBIDDEN,
+          timestamp: new Date().toISOString(),
+        },
+        HttpStatus.FORBIDDEN,
+      );
     }
 
     const hasRole = requiredRoles.some((role) => user.role === role);
 
     if (!hasRole) {
-      throw new ForbiddenException(
-        `Chỉ ${requiredRoles.join(', ')} mới có quyền truy cập`,
+      throw new HttpException(
+        {
+          success: false,
+          statusCode: HttpStatus.FORBIDDEN,
+          code: ErrorCode.FORBIDDEN,
+          timestamp: new Date().toISOString(),
+        },
+        HttpStatus.FORBIDDEN,
       );
     }
 
