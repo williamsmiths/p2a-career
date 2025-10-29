@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import compression from 'compression';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
@@ -52,25 +51,6 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger documentation (chỉ enable trong development)
-  if (nodeEnv === 'development') {
-    const config = new DocumentBuilder()
-      .setTitle('P2A ASEAN Career Module API')
-      .setDescription('API documentation for P2A ASEAN Career Module - Job Portal & Recruitment')
-      .setVersion('1.0')
-      .addBearerAuth()
-      .addTag('companies', 'Company management endpoints')
-      .addTag('jobs', 'Job posting endpoints')
-      .addTag('cvs', 'CV management endpoints')
-      .addTag('applications', 'Job application endpoints')
-      .addTag('saved-jobs', 'Saved jobs endpoints')
-      .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/docs', app, document);
-
-    logger.log('Swagger documentation available at /api/docs');
-  }
 
   // Start HTTP server
   await app.listen(port);

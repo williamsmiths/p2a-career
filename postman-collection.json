@@ -571,6 +571,786 @@
           }
         }
       ]
+    },
+    {
+      "name": "Master Data (Admin Only)",
+      "item": [
+        {
+          "name": "Countries",
+          "item": [
+            {
+              "name": "Get All Countries",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/countries",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "countries"]
+                }
+              }
+            },
+            {
+              "name": "Get Country by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/countries/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "countries", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Country (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Vietnam\",\n  \"code\": \"VN\",\n  \"nameEn\": \"Vietnam\",\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/countries",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "countries"]
+                }
+              }
+            },
+            {
+              "name": "Update Country (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Vietnam Updated\",\n  \"isActive\": false\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/countries/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "countries", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete Country (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/countries/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "countries", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cities",
+          "item": [
+            {
+              "name": "Get All Cities",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/cities",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "cities"]
+                }
+              }
+            },
+            {
+              "name": "Get Cities by Country",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/cities?countryId=1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "cities"],
+                  "query": [
+                    {
+                      "key": "countryId",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get City by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/cities/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "cities", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create City (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ho Chi Minh City\",\n  \"nameEn\": \"Ho Chi Minh City\",\n  \"countryId\": 1,\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/cities",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "cities"]
+                }
+              }
+            },
+            {
+              "name": "Update City (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ho Chi Minh City Updated\",\n  \"isActive\": false\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/cities/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "cities", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete City (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/cities/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "cities", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Districts",
+          "item": [
+            {
+              "name": "Get All Districts",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/districts",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "districts"]
+                }
+              }
+            },
+            {
+              "name": "Get Districts by City",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/districts?cityId=1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "districts"],
+                  "query": [
+                    {
+                      "key": "cityId",
+                      "value": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get District by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/districts/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "districts", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create District (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"District 1\",\n  \"nameEn\": \"District 1\",\n  \"cityId\": 1,\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/districts",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "districts"]
+                }
+              }
+            },
+            {
+              "name": "Update District (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"District 1 Updated\",\n  \"isActive\": false\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/districts/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "districts", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete District (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/districts/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "districts", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Industries",
+          "item": [
+            {
+              "name": "Get All Industries",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/industries",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "industries"]
+                }
+              }
+            },
+            {
+              "name": "Get Industry by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/industries/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "industries", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Industry (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Information Technology\",\n  \"nameEn\": \"Information Technology\",\n  \"description\": \"Technology and software development industry\",\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/industries",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "industries"]
+                }
+              }
+            },
+            {
+              "name": "Update Industry (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"IT & Software\",\n  \"description\": \"Updated description\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/industries/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "industries", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete Industry (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/industries/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "industries", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Skills",
+          "item": [
+            {
+              "name": "Get All Skills",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/skills",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "skills"]
+                }
+              }
+            },
+            {
+              "name": "Get Skills by Category",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/skills?category=technical",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "skills"],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "technical"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Skill by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/skills/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "skills", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Skill (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"React.js\",\n  \"nameEn\": \"React.js\",\n  \"description\": \"JavaScript library for building user interfaces\",\n  \"category\": \"technical\",\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/skills",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "skills"]
+                }
+              }
+            },
+            {
+              "name": "Update Skill (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"React.js Advanced\",\n  \"description\": \"Advanced React.js development skills\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/skills/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "skills", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete Skill (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/skills/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "skills", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Position Levels",
+          "item": [
+            {
+              "name": "Get All Position Levels",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/position-levels",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "position-levels"]
+                }
+              }
+            },
+            {
+              "name": "Get Position Level by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/position-levels/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "position-levels", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Position Level (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Senior Developer\",\n  \"nameEn\": \"Senior Developer\",\n  \"description\": \"Senior level developer position\",\n  \"sortOrder\": 3,\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/position-levels",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "position-levels"]
+                }
+              }
+            },
+            {
+              "name": "Update Position Level (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Senior Software Developer\",\n  \"sortOrder\": 4\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/position-levels/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "position-levels", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete Position Level (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/position-levels/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "position-levels", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Experience Levels",
+          "item": [
+            {
+              "name": "Get All Experience Levels",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/experience-levels",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "experience-levels"]
+                }
+              }
+            },
+            {
+              "name": "Get Experience Level by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/experience-levels/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "experience-levels", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Experience Level (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"3-5 years\",\n  \"nameEn\": \"3-5 years\",\n  \"description\": \"3 to 5 years of experience\",\n  \"minYears\": 3,\n  \"maxYears\": 5,\n  \"sortOrder\": 3,\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/experience-levels",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "experience-levels"]
+                }
+              }
+            },
+            {
+              "name": "Update Experience Level (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"3-5 years experience\",\n  \"minYears\": 3,\n  \"maxYears\": 6\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/experience-levels/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "experience-levels", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete Experience Level (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/experience-levels/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "experience-levels", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Company Sizes",
+          "item": [
+            {
+              "name": "Get All Company Sizes",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/company-sizes",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "company-sizes"]
+                }
+              }
+            },
+            {
+              "name": "Get Company Size by ID",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/company-sizes/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "company-sizes", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Company Size (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"50-200 employees\",\n  \"nameEn\": \"50-200 employees\",\n  \"description\": \"Medium-sized company\",\n  \"minEmployees\": 50,\n  \"maxEmployees\": 200,\n  \"sortOrder\": 3,\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/company-sizes",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "company-sizes"]
+                }
+              }
+            },
+            {
+              "name": "Update Company Size (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"50-250 employees\",\n  \"maxEmployees\": 250\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/company-sizes/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "company-sizes", "1"]
+                }
+              }
+            },
+            {
+              "name": "Delete Company Size (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/master-data/company-sizes/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["master-data", "company-sizes", "1"]
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
