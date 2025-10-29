@@ -8,6 +8,10 @@ export enum ErrorCode {
   NOT_FOUND = 'NOT_FOUND',
   CONFLICT = 'CONFLICT',
 
+  // Auth domain (đồng bộ với core-system ở mức cần dùng)
+  AUTH_TOKEN_EXPIRED = 'AUTH_TOKEN_EXPIRED',
+  AUTH_TOKEN_INVALID = 'AUTH_TOKEN_INVALID',
+
   // Career domain (extend as needed)
   JOB_NOT_FOUND = 'JOB_NOT_FOUND',
   COMPANY_NOT_FOUND = 'COMPANY_NOT_FOUND',

@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 
 // Config
@@ -11,7 +9,6 @@ import { appConfig, databaseConfig, jwtConfig, grpcConfig, validate } from './co
 
 // Common
 import { JwtAuthGuard, RolesGuard } from './common/guards';
-import { JwtStrategy } from './common/strategies';
 import { HttpExceptionFilter } from './common/filters';
 import { TransformInterceptor } from './common/interceptors';
 
@@ -44,20 +41,7 @@ import { MasterDataModule } from './modules/master-data/master-data.module';
       useFactory: (configService: ConfigService) => configService.get('database'),
     }),
 
-    // Passport Module
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-
-    // JWT Module - Shared secret với Core System
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('jwt.secret'),
-        signOptions: {
-          expiresIn: configService.get<string>('jwt.accessExpiration'),
-        },
-      }),
-    }),
+    // Bỏ Passport/JWT - xác thực qua gRPC Core System
 
     // Throttler Module - Rate limiting
     ThrottlerModule.forRoot([
@@ -78,8 +62,6 @@ import { MasterDataModule } from './modules/master-data/master-data.module';
   ],
   controllers: [HealthController],
   providers: [
-    JwtStrategy,
-    
     // Global Guards
     {
       provide: APP_GUARD,

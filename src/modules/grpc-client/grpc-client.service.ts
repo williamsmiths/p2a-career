@@ -4,10 +4,21 @@ import { ClientGrpc, Client, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { firstValueFrom } from 'rxjs';
 
+// Kiểu dữ liệu trả về từ gRPC UserService (theo proto)
+export interface GrpcUserResponse {
+  id: string;
+  email: string;
+  role: string;
+  is_active: boolean;
+  is_email_verified: boolean;
+  profile?: any;
+}
+
 // gRPC User Service Interface
 interface UserServiceGrpc {
   findById(data: { id: string }): any;
   findByEmail(data: { email: string }): any;
+  validateToken(data: { token: string }): any;
   validateUser(data: { id: string }): any;
   getUsersByIds(data: { ids: string[] }): any;
 }
@@ -85,6 +96,18 @@ export class GrpcClientService implements OnModuleInit {
       return result.users || [];
     } catch (error) {
       this.logger.error(`Error getting users by IDs:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Xác thực token qua Core System
+   */
+  async validateToken(token: string): Promise<GrpcUserResponse> {
+    try {
+      return await firstValueFrom(this.userService.validateToken({ token })) as GrpcUserResponse;
+    } catch (error) {
+      this.logger.error(`Error validating token via gRPC:`, error);
       throw error;
     }
   }
