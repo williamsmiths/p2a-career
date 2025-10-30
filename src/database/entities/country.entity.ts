@@ -13,8 +13,8 @@ import { City } from './city.entity';
  */
 @Entity('countries')
 export class Country {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 100, unique: true })
   name: string;

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsInt, MaxLength } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, MaxLength } from 'class-validator';
 
 export class CreateCityDto {
   @IsString()
@@ -10,8 +10,8 @@ export class CreateCityDto {
   @MaxLength(100)
   nameEn?: string;
 
-  @IsInt()
-  countryId: number;
+  @IsString()
+  countryId: string;
 
   @IsOptional()
   @IsBoolean()

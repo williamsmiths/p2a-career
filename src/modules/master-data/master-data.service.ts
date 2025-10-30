@@ -63,7 +63,7 @@ export class MasterDataService {
     });
   }
 
-  async findCountryById(id: number): Promise<Country> {
+  async findCountryById(id: string): Promise<Country> {
     const country = await this.countriesRepository.findOne({ where: { id } });
     if (!country) {
       throw new BusinessException(ErrorCode.NOT_FOUND);
@@ -78,7 +78,7 @@ export class MasterDataService {
     return saved;
   }
 
-  async updateCountry(id: number, updateCountryDto: UpdateCountryDto): Promise<Country> {
+  async updateCountry(id: string, updateCountryDto: UpdateCountryDto): Promise<Country> {
     const country = await this.findCountryById(id);
     Object.assign(country, updateCountryDto);
     const updated = await this.countriesRepository.save(country);
@@ -86,14 +86,14 @@ export class MasterDataService {
     return updated;
   }
 
-  async deleteCountry(id: number): Promise<void> {
+  async deleteCountry(id: string): Promise<void> {
     const country = await this.findCountryById(id);
     await this.countriesRepository.remove(country);
     this.logger.log(`Country deleted: ${id}`);
   }
 
   // ==================== CITIES ====================
-  async findAllCities(countryId?: number): Promise<City[]> {
+  async findAllCities(countryId?: string): Promise<City[]> {
     const where: any = { isActive: true };
     if (countryId) {
       where.countryId = countryId;
@@ -106,7 +106,7 @@ export class MasterDataService {
     });
   }
 
-  async findCityById(id: number): Promise<City> {
+  async findCityById(id: string): Promise<City> {
     const city = await this.citiesRepository.findOne({ 
       where: { id },
       relations: ['country']
@@ -124,7 +124,7 @@ export class MasterDataService {
     return saved;
   }
 
-  async updateCity(id: number, updateCityDto: UpdateCityDto): Promise<City> {
+  async updateCity(id: string, updateCityDto: UpdateCityDto): Promise<City> {
     const city = await this.findCityById(id);
     Object.assign(city, updateCityDto);
     const updated = await this.citiesRepository.save(city);
@@ -132,14 +132,14 @@ export class MasterDataService {
     return updated;
   }
 
-  async deleteCity(id: number): Promise<void> {
+  async deleteCity(id: string): Promise<void> {
     const city = await this.findCityById(id);
     await this.citiesRepository.remove(city);
     this.logger.log(`City deleted: ${id}`);
   }
 
   // ==================== DISTRICTS ====================
-  async findAllDistricts(cityId?: number): Promise<District[]> {
+  async findAllDistricts(cityId?: string): Promise<District[]> {
     const where: any = { isActive: true };
     if (cityId) {
       where.cityId = cityId;
@@ -152,7 +152,7 @@ export class MasterDataService {
     });
   }
 
-  async findDistrictById(id: number): Promise<District> {
+  async findDistrictById(id: string): Promise<District> {
     const district = await this.districtsRepository.findOne({ 
       where: { id },
       relations: ['city']
@@ -170,7 +170,7 @@ export class MasterDataService {
     return saved;
   }
 
-  async updateDistrict(id: number, updateDistrictDto: UpdateDistrictDto): Promise<District> {
+  async updateDistrict(id: string, updateDistrictDto: UpdateDistrictDto): Promise<District> {
     const district = await this.findDistrictById(id);
     Object.assign(district, updateDistrictDto);
     const updated = await this.districtsRepository.save(district);
@@ -178,7 +178,7 @@ export class MasterDataService {
     return updated;
   }
 
-  async deleteDistrict(id: number): Promise<void> {
+  async deleteDistrict(id: string): Promise<void> {
     const district = await this.findDistrictById(id);
     await this.districtsRepository.remove(district);
     this.logger.log(`District deleted: ${id}`);
@@ -373,4 +373,5 @@ export class MasterDataService {
     await this.companySizesRepository.remove(companySize);
     this.logger.log(`CompanySize deleted: ${id}`);
   }
+ 
 }

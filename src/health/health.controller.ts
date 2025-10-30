@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { Public } from '../common/decorators';
+import { Controller, Get, Req } from '@nestjs/common';
+import { Request } from 'express';
 
 /**
  * Health Check Controller
@@ -7,12 +7,12 @@ import { Public } from '../common/decorators';
 @Controller('health')
 export class HealthController {
   @Get()
-  @Public()
-  check() {
+  check(@Req() req: Request) {
     return {
       status: 'ok',
       service: 'p2a-career',
       timestamp: new Date().toISOString(),
+      user: req.user ?? null,
     };
   }
 }

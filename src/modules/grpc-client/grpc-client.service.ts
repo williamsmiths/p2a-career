@@ -37,7 +37,8 @@ export class GrpcClientService implements OnModuleInit {
     options: {
       package: 'user',
       protoPath: join(__dirname, '../../../proto/user.proto'),
-      url: 'localhost:50051', // Default URL
+      // Sử dụng biến môi trường để cấu hình URL Core System; fallback về localhost
+      url: process.env.GRPC_CORE_SYSTEM_URL || 'localhost:50051',
     },
   })
   private client: ClientGrpc;

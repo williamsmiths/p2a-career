@@ -11,7 +11,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { MasterDataService } from './master-data.service';
-import { UserRole, Roles, RolesGuard } from '@common';
+import { UserRole, Roles, RolesGuard, Public } from '@common';
 
 // DTOs
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -36,15 +36,64 @@ import { UpdateCompanySizeDto } from './dto/update-company-size.dto';
 export class MasterDataController {
   constructor(private readonly masterDataService: MasterDataService) {}
 
-  // ==================== COUNTRIES ====================
-  @Get('countries')
-  findAllCountries() {
-    return this.masterDataService.findAllCountries();
+  // Helpers: Map entity -> response with id là string
+  private mapCountry(country: any) {
+    return country
+      ? {
+          id: String(country.id),
+          name: country.name,
+          code: country.code ?? null,
+          nameEn: country.nameEn ?? null,
+          isActive: country.isActive,
+        }
+      : null;
   }
 
+  private mapCity(city: any, includeCountry = false) {
+    return city
+      ? {
+          id: String(city.id),
+          name: city.name,
+          nameEn: city.nameEn ?? null,
+          countryId: String(city.countryId),
+          isActive: city.isActive,
+          ...(includeCountry && city.country
+            ? { country: this.mapCountry(city.country) }
+            : {}),
+        }
+      : null;
+  }
+
+  private mapDistrict(district: any, includeCity = false) {
+    return district
+      ? {
+          id: String(district.id),
+          name: district.name,
+          nameEn: district.nameEn ?? null,
+          cityId: String(district.cityId),
+          isActive: district.isActive,
+          ...(includeCity && district.city
+            ? { city: this.mapCity(district.city, false) }
+            : {}),
+        }
+      : null;
+  }
+
+  // ==================== COUNTRIES ====================
+  @Public()
+  @Get('countries')
+  findAllCountries() {
+    return this.masterDataService
+      .findAllCountries()
+      .then((items) => items.map((c) => this.mapCountry(c)));
+  }
+
+  @Public()
   @Get('countries/:id')
-  findCountryById(@Param('id', ParseIntPipe) id: number) {
-    return this.masterDataService.findCountryById(id);
+  findCountryById(@Param('id') id: string) {
+    return this.masterDataService
+      .findCountryById(id)
+      .then((c) => this.mapCountry(c));
   }
 
   @Post('countries')
@@ -56,7 +105,7 @@ export class MasterDataController {
   @Patch('countries/:id')
   @Roles(UserRole.ADMIN)
   updateCountry(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateCountryDto: UpdateCountryDto,
   ) {
     return this.masterDataService.updateCountry(id, updateCountryDto);
@@ -64,20 +113,25 @@ export class MasterDataController {
 
   @Delete('countries/:id')
   @Roles(UserRole.ADMIN)
-  deleteCountry(@Param('id', ParseIntPipe) id: number) {
+  deleteCountry(@Param('id') id: string) {
     return this.masterDataService.deleteCountry(id);
   }
 
   // ==================== CITIES ====================
+  @Public()
   @Get('cities')
   findAllCities(@Query('countryId') countryId?: string) {
-    const countryIdNum = countryId ? parseInt(countryId, 10) : undefined;
-    return this.masterDataService.findAllCities(countryIdNum);
+    return this.masterDataService
+      .findAllCities(countryId)
+      .then((items) => items.map((c) => this.mapCity(c, true)));
   }
 
+  @Public()
   @Get('cities/:id')
-  findCityById(@Param('id', ParseIntPipe) id: number) {
-    return this.masterDataService.findCityById(id);
+  findCityById(@Param('id') id: string) {
+    return this.masterDataService
+      .findCityById(id)
+      .then((c) => this.mapCity(c, true));
   }
 
   @Post('cities')
@@ -89,7 +143,7 @@ export class MasterDataController {
   @Patch('cities/:id')
   @Roles(UserRole.ADMIN)
   updateCity(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateCityDto: UpdateCityDto,
   ) {
     return this.masterDataService.updateCity(id, updateCityDto);
@@ -97,20 +151,25 @@ export class MasterDataController {
 
   @Delete('cities/:id')
   @Roles(UserRole.ADMIN)
-  deleteCity(@Param('id', ParseIntPipe) id: number) {
+  deleteCity(@Param('id') id: string) {
     return this.masterDataService.deleteCity(id);
   }
 
   // ==================== DISTRICTS ====================
+  @Public()
   @Get('districts')
   findAllDistricts(@Query('cityId') cityId?: string) {
-    const cityIdNum = cityId ? parseInt(cityId, 10) : undefined;
-    return this.masterDataService.findAllDistricts(cityIdNum);
+    return this.masterDataService
+      .findAllDistricts(cityId)
+      .then((items) => items.map((d) => this.mapDistrict(d, true)));
   }
 
+  @Public()
   @Get('districts/:id')
-  findDistrictById(@Param('id', ParseIntPipe) id: number) {
-    return this.masterDataService.findDistrictById(id);
+  findDistrictById(@Param('id') id: string) {
+    return this.masterDataService
+      .findDistrictById(id)
+      .then((d) => this.mapDistrict(d, true));
   }
 
   @Post('districts')
@@ -122,7 +181,7 @@ export class MasterDataController {
   @Patch('districts/:id')
   @Roles(UserRole.ADMIN)
   updateDistrict(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateDistrictDto: UpdateDistrictDto,
   ) {
     return this.masterDataService.updateDistrict(id, updateDistrictDto);
@@ -130,16 +189,18 @@ export class MasterDataController {
 
   @Delete('districts/:id')
   @Roles(UserRole.ADMIN)
-  deleteDistrict(@Param('id', ParseIntPipe) id: number) {
+  deleteDistrict(@Param('id') id: string) {
     return this.masterDataService.deleteDistrict(id);
   }
 
   // ==================== INDUSTRIES ====================
+  @Public()
   @Get('industries')
   findAllIndustries() {
     return this.masterDataService.findAllIndustries();
   }
 
+  @Public()
   @Get('industries/:id')
   findIndustryById(@Param('id', ParseIntPipe) id: number) {
     return this.masterDataService.findIndustryById(id);
@@ -167,11 +228,13 @@ export class MasterDataController {
   }
 
   // ==================== SKILLS ====================
+  @Public()
   @Get('skills')
   findAllSkills(@Query('category') category?: string) {
     return this.masterDataService.findAllSkills(category);
   }
 
+  @Public()
   @Get('skills/:id')
   findSkillById(@Param('id', ParseIntPipe) id: number) {
     return this.masterDataService.findSkillById(id);
@@ -199,11 +262,13 @@ export class MasterDataController {
   }
 
   // ==================== POSITION LEVELS ====================
+  @Public()
   @Get('position-levels')
   findAllPositionLevels() {
     return this.masterDataService.findAllPositionLevels();
   }
 
+  @Public()
   @Get('position-levels/:id')
   findPositionLevelById(@Param('id', ParseIntPipe) id: number) {
     return this.masterDataService.findPositionLevelById(id);
@@ -231,11 +296,13 @@ export class MasterDataController {
   }
 
   // ==================== EXPERIENCE LEVELS ====================
+  @Public()
   @Get('experience-levels')
   findAllExperienceLevels() {
     return this.masterDataService.findAllExperienceLevels();
   }
 
+  @Public()
   @Get('experience-levels/:id')
   findExperienceLevelById(@Param('id', ParseIntPipe) id: number) {
     return this.masterDataService.findExperienceLevelById(id);
@@ -263,11 +330,13 @@ export class MasterDataController {
   }
 
   // ==================== COMPANY SIZES ====================
+  @Public()
   @Get('company-sizes')
   findAllCompanySizes() {
     return this.masterDataService.findAllCompanySizes();
   }
 
+  @Public()
   @Get('company-sizes/:id')
   findCompanySizeById(@Param('id', ParseIntPipe) id: number) {
     return this.masterDataService.findCompanySizeById(id);

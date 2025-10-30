@@ -16,8 +16,8 @@ import { District } from './district.entity';
  */
 @Entity('cities')
 export class City {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 100 })
   name: string;
@@ -25,8 +25,8 @@ export class City {
   @Column({ length: 100, nullable: true })
   nameEn: string | null;
 
-  @Column({ name: 'country_id', type: 'int' })
-  countryId: number;
+  @Column({ name: 'country_id', type: 'uuid' })
+  countryId: string;
 
   @Column({ type: 'boolean', default: true })
   isActive: boolean;

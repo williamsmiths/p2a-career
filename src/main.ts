@@ -25,7 +25,7 @@ async function bootstrap() {
   const corsOrigin = configService.get<string[]>('app.corsOrigin', ['*']);
 
   // Global prefix cho tất cả routes
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api/career');
 
   // Enable CORS
   app.enableCors({
@@ -53,9 +53,7 @@ async function bootstrap() {
     }),
   );
 
-  // Global filters & interceptors (chuẩn hóa response và lỗi)
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  // Global filters & interceptors đã đăng ký qua APP_FILTER/APP_INTERCEPTOR trong AppModule
 
 
   // Start HTTP server
