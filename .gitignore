@@ -1,8 +1,7 @@
 # compiled output
 /dist
 /node_modules
-/.pnp
-.pnp.js
+/build
 
 # Logs
 logs
@@ -28,8 +27,6 @@ lerna-debug.log*
 *.launch
 .settings/
 *.sublime-workspace
-
-# IDE - VSCode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -39,10 +36,16 @@ lerna-debug.log*
 # Environment
 .env
 .env.local
-.env.development
-.env.test
-.env.production
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Build
-*.tsbuildinfo
+# Misc
+*.swp
+*.swo
+*~
+.tmp
+.temp
 
+.cursor
+.serena

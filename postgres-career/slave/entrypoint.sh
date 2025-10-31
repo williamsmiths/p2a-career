@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 set -e
 
 # If running as root, fix permissions then re-exec as 'postgres'
@@ -30,5 +29,3 @@ fi
 chmod 0700 /var/lib/postgresql/data/pgdata 2>/dev/null || true
 
 exec postgres -c config_file=/etc/postgresql/postgresql.conf
-
-

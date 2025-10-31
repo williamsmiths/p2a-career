@@ -1,45 +1,45 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import compression from 'compression';
-import helmet from 'helmet';
-import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters';
-import { TransformInterceptor } from './common/interceptors';
+import { NestFactory } from '@nestjs/core'
+import { ValidationPipe, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import compression from 'compression'
+import helmet from 'helmet'
+import { AppModule } from './app.module'
+import { HttpExceptionFilter } from './common/filters'
+import { TransformInterceptor } from './common/interceptors'
 
 /**
  * Bootstrap function - Khởi tạo NestJS application
  */
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
+  const logger = new Logger('Bootstrap')
 
   // Tạo NestJS application
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
-  });
+    logger: ['error', 'warn', 'log', 'debug', 'verbose']
+  })
 
   // Get config service
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('app.port', 3001);
-  const nodeEnv = configService.get<string>('app.nodeEnv', 'development');
-  const corsOrigin = configService.get<string[]>('app.corsOrigin', ['*']);
+  const configService = app.get(ConfigService)
+  const port = configService.get<number>('app.port', 3001)
+  const nodeEnv = configService.get<string>('app.nodeEnv', 'development')
+  const corsOrigin = configService.get<string[]>('app.corsOrigin', ['*'])
 
   // Global prefix cho tất cả routes
-  app.setGlobalPrefix('api/career');
+  app.setGlobalPrefix('api/career')
 
   // Enable CORS
   app.enableCors({
     origin: corsOrigin,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  });
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  })
 
   // Security middleware
-  app.use(helmet());
+  app.use(helmet())
 
   // Compression middleware
-  app.use(compression());
+  app.use(compression())
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -48,29 +48,27 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // Throw error nếu có property không hợp lệ
       transform: true, // Tự động transform type
       transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  );
+        enableImplicitConversion: true
+      }
+    })
+  )
 
   // Global filters & interceptors đã đăng ký qua APP_FILTER/APP_INTERCEPTOR trong AppModule
 
-
   // Start HTTP server
-  await app.listen(port);
+  await app.listen(port)
 
-  logger.log(`🚀 HTTP Application is running on: http://localhost:${port}/api`);
-  logger.log(`📝 Environment: ${nodeEnv}`);
-  logger.log(`🌍 Timezone: ${process.env.TZ || 'UTC'}`);
-  logger.log(`💚 Health check: http://localhost:${port}/api/health`);
+  logger.log(`🚀 HTTP Application is running on: http://localhost:${port}/api`)
+  logger.log(`📝 Environment: ${nodeEnv}`)
+  logger.log(`🌍 Timezone: ${process.env.TZ || 'UTC'}`)
+  logger.log(`💚 Health check: http://localhost:${port}/api/health`)
 }
 
 // Set timezone to UTC (theo quy tắc trong Rule.md)
-process.env.TZ = 'UTC';
+process.env.TZ = 'UTC'
 
 bootstrap().catch((error) => {
-  const logger = new Logger('Bootstrap');
-  logger.error('Failed to start application', error);
-  process.exit(1);
-});
-
+  const logger = new Logger('Bootstrap')
+  logger.error('Failed to start application', error)
+  process.exit(1)
+})
