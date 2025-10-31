@@ -4,9 +4,6 @@ import { Repository } from 'typeorm';
 import { UserRole } from '@common';
 
 // Entities
-import { Country } from '@entities';
-import { City } from '@entities';
-import { District } from '@entities';
 import { Industry } from '@entities';
 import { Skill } from '@entities';
 import { PositionLevel } from '@entities';
@@ -15,12 +12,6 @@ import { CompanySize } from '@entities';
 import { BusinessException, ErrorCode } from '@common';
 
 // DTOs
-import { CreateCountryDto } from './dto/create-country.dto';
-import { UpdateCountryDto } from './dto/update-country.dto';
-import { CreateCityDto } from './dto/create-city.dto';
-import { UpdateCityDto } from './dto/update-city.dto';
-import { CreateDistrictDto } from './dto/create-district.dto';
-import { UpdateDistrictDto } from './dto/update-district.dto';
 import { CreateIndustryDto } from './dto/create-industry.dto';
 import { UpdateIndustryDto } from './dto/update-industry.dto';
 import { CreateSkillDto } from './dto/create-skill.dto';
@@ -37,12 +28,6 @@ export class MasterDataService {
   private readonly logger = new Logger(MasterDataService.name);
 
   constructor(
-    @InjectRepository(Country)
-    private readonly countriesRepository: Repository<Country>,
-    @InjectRepository(City)
-    private readonly citiesRepository: Repository<City>,
-    @InjectRepository(District)
-    private readonly districtsRepository: Repository<District>,
     @InjectRepository(Industry)
     private readonly industriesRepository: Repository<Industry>,
     @InjectRepository(Skill)
@@ -54,135 +39,6 @@ export class MasterDataService {
     @InjectRepository(CompanySize)
     private readonly companySizesRepository: Repository<CompanySize>,
   ) {}
-
-  // ==================== COUNTRIES ====================
-  async findAllCountries(): Promise<Country[]> {
-    return this.countriesRepository.find({
-      where: { isActive: true },
-      order: { name: 'ASC' },
-    });
-  }
-
-  async findCountryById(id: string): Promise<Country> {
-    const country = await this.countriesRepository.findOne({ where: { id } });
-    if (!country) {
-      throw new BusinessException(ErrorCode.NOT_FOUND);
-    }
-    return country;
-  }
-
-  async createCountry(createCountryDto: CreateCountryDto): Promise<Country> {
-    const country = this.countriesRepository.create(createCountryDto);
-    const saved = await this.countriesRepository.save(country);
-    this.logger.log(`Country created: ${saved.id}`);
-    return saved;
-  }
-
-  async updateCountry(id: string, updateCountryDto: UpdateCountryDto): Promise<Country> {
-    const country = await this.findCountryById(id);
-    Object.assign(country, updateCountryDto);
-    const updated = await this.countriesRepository.save(country);
-    this.logger.log(`Country updated: ${id}`);
-    return updated;
-  }
-
-  async deleteCountry(id: string): Promise<void> {
-    const country = await this.findCountryById(id);
-    await this.countriesRepository.remove(country);
-    this.logger.log(`Country deleted: ${id}`);
-  }
-
-  // ==================== CITIES ====================
-  async findAllCities(countryId?: string): Promise<City[]> {
-    const where: any = { isActive: true };
-    if (countryId) {
-      where.countryId = countryId;
-    }
-    
-    return this.citiesRepository.find({
-      where,
-      relations: ['country'],
-      order: { name: 'ASC' },
-    });
-  }
-
-  async findCityById(id: string): Promise<City> {
-    const city = await this.citiesRepository.findOne({ 
-      where: { id },
-      relations: ['country']
-    });
-    if (!city) {
-      throw new BusinessException(ErrorCode.NOT_FOUND);
-    }
-    return city;
-  }
-
-  async createCity(createCityDto: CreateCityDto): Promise<City> {
-    const city = this.citiesRepository.create(createCityDto);
-    const saved = await this.citiesRepository.save(city);
-    this.logger.log(`City created: ${saved.id}`);
-    return saved;
-  }
-
-  async updateCity(id: string, updateCityDto: UpdateCityDto): Promise<City> {
-    const city = await this.findCityById(id);
-    Object.assign(city, updateCityDto);
-    const updated = await this.citiesRepository.save(city);
-    this.logger.log(`City updated: ${id}`);
-    return updated;
-  }
-
-  async deleteCity(id: string): Promise<void> {
-    const city = await this.findCityById(id);
-    await this.citiesRepository.remove(city);
-    this.logger.log(`City deleted: ${id}`);
-  }
-
-  // ==================== DISTRICTS ====================
-  async findAllDistricts(cityId?: string): Promise<District[]> {
-    const where: any = { isActive: true };
-    if (cityId) {
-      where.cityId = cityId;
-    }
-    
-    return this.districtsRepository.find({
-      where,
-      relations: ['city'],
-      order: { name: 'ASC' },
-    });
-  }
-
-  async findDistrictById(id: string): Promise<District> {
-    const district = await this.districtsRepository.findOne({ 
-      where: { id },
-      relations: ['city']
-    });
-    if (!district) {
-      throw new BusinessException(ErrorCode.NOT_FOUND);
-    }
-    return district;
-  }
-
-  async createDistrict(createDistrictDto: CreateDistrictDto): Promise<District> {
-    const district = this.districtsRepository.create(createDistrictDto);
-    const saved = await this.districtsRepository.save(district);
-    this.logger.log(`District created: ${saved.id}`);
-    return saved;
-  }
-
-  async updateDistrict(id: string, updateDistrictDto: UpdateDistrictDto): Promise<District> {
-    const district = await this.findDistrictById(id);
-    Object.assign(district, updateDistrictDto);
-    const updated = await this.districtsRepository.save(district);
-    this.logger.log(`District updated: ${id}`);
-    return updated;
-  }
-
-  async deleteDistrict(id: string): Promise<void> {
-    const district = await this.findDistrictById(id);
-    await this.districtsRepository.remove(district);
-    this.logger.log(`District deleted: ${id}`);
-  }
 
   // ==================== INDUSTRIES ====================
   async findAllIndustries(): Promise<Industry[]> {
